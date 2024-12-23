@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"lambda-func/app"
+
+	"github.com/aws/aws-lambda-go/lambda"
+)
 
 type MyEvent struct {
 	Username string `json:"username"` // its called tagging
@@ -12,8 +17,9 @@ func HandleRequest(event MyEvent) (string, error) {
 		return "", fmt.Errorf("username cannot be empty ")
 	}
 
-	return fmt.Sprintf("Scucessfully called by - %s\n", event.Username), nil
+	return fmt.Sprintf("Successfully called by - %s\n", event.Username), nil
 }
 func main() {
-
+	_ = app.NewApp() // we will use it later
+	lambda.Start(HandleRequest)
 }
