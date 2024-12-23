@@ -20,6 +20,6 @@ func HandleRequest(event MyEvent) (string, error) {
 	return fmt.Sprintf("Successfully called by - %s\n", event.Username), nil
 }
 func main() {
-	_ = app.NewApp() // we will use it later
-	lambda.Start(HandleRequest)
+	myApp := app.NewApp() // we will use it later
+	lambda.Start(myApp.ApiHandler.RegisterUserHandler)
 }

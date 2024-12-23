@@ -34,7 +34,7 @@ func (u DynamoDBClient) DoesUserExist(username string) (bool, error) {
 		},
 	})
 	if err != nil {
-		return true, err // cacth this erorr in api handler
+		return true, err // catch this error in api handler
 	}
 	// does an item exists in the table
 	if result.Item == nil {
