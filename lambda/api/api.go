@@ -77,3 +77,39 @@ func (api ApiHandler) RegisterUserHandler(request events.APIGatewayProxyRequest)
 		StatusCode: http.StatusOK,
 	}, nil
 }
+
+func (api ApiHandler) LoginUser(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	type LoginRequest struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	var loginRequest LoginRequest
+	err := json.Unmarshal([]byte(request.Body), &loginRequest)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			Body:       "Invalid request",
+			StatusCode: http.StatusBadRequest,
+		}, err
+	}
+
+	user, err := api.dbStore.GetUser(loginRequest.Username)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			Body:       "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+		}, err
+	}
+
+	// validate password we are getting with one stored in database
+	if !types.ValidatePassword(user.PasswordHash, loginRequest.Password) {
+		return events.APIGatewayProxyResponse{
+			Body:       "Invalid User Credentials",
+			StatusCode: http.StatusBadRequest,
+		}, nil
+	}
+
+	return events.APIGatewayProxyResponse{
+		Body:       "Successfully logged in",
+		StatusCode: http.StatusOK,
+	}, nil
+}
