@@ -59,6 +59,10 @@ func NewGoCdkStack(scope constructs.Construct, id string, props *GoCdkStackProps
 	// Define Routes
 	loginResource := api.Root().AddResource(jsii.String("login"), nil) // its like defining localhost:3000/register
 	loginResource.AddMethod(jsii.String("POST"), integration, nil)
+
+	// Define Routes
+	protectedResource := api.Root().AddResource(jsii.String("protected"), nil) // its like defining localhost:3000/register
+	protectedResource.AddMethod(jsii.String("GET"), integration, nil)
 	return stack
 }
 

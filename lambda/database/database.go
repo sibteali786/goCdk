@@ -17,6 +17,7 @@ const (
 type UserStore interface {
 	DoesUserExist(username string) (bool, error)
 	InsertUser(user types.User) error
+	GetUser(username string) (types.User, error)
 }
 type DynamoDBClient struct {
 	databaseStore *dynamodb.DynamoDB
